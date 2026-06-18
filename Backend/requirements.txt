@@ -1,0 +1,85 @@
+# # =============================================================================
+# # requirements.txt — Python packages needed for the backend
+# # =============================================================================
+# # Install all of these with: pip install -r requirements.txt
+# #
+# # WHAT EACH PACKAGE DOES:
+# # =============================================================================
+
+# # FastAPI — our web framework (creates the HTTP API)
+# fastapi==0.111.0
+
+# # Uvicorn — the ASGI server that runs FastAPI
+# # ASGI = Asynchronous Server Gateway Interface (handles async Python web apps)
+# uvicorn[standard]==0.29.0
+
+# # PyMuPDF — extracts text from PDF files
+# # Imported as "fitz" (confusingly named after the original C library)
+# PyMuPDF==1.24.3
+
+# # FAISS — Facebook AI Similarity Search (vector database)
+# # Use faiss-cpu for machines without a GPU (most laptops)
+# # Use faiss-gpu if you have an NVIDIA GPU
+# faiss-cpu==1.8.0
+
+# # Sentence Transformers — generates text embeddings
+# # This is what converts text → vectors
+# sentence-transformers==2.7.0
+
+# # NumPy — numerical computing (arrays, math operations)
+# # Used to handle the embedding arrays
+# numpy==1.26.4
+
+# # HTTPX — async HTTP client (for calling Ollama's API)
+# httpx==0.27.0
+
+# # Python-Multipart — needed for handling file uploads in FastAPI
+# python-multipart==0.0.9
+
+# # Pydantic — data validation (FastAPI uses this under the hood)
+# pydantic==2.7.1
+
+# =============================================================================
+# requirements.txt — Python packages needed for the backend
+# =============================================================================
+# Install all of these with: pip install -r requirements.txt
+#
+# WHAT EACH PACKAGE DOES:
+# =============================================================================
+
+# FastAPI — our web framework (creates the HTTP API)
+fastapi==0.111.0
+
+# Uvicorn — the ASGI server that runs FastAPI
+# ASGI = Asynchronous Server Gateway Interface (handles async Python web apps)
+uvicorn[standard]==0.29.0
+
+# PyMuPDF — extracts text from PDF files
+# Imported as "fitz" (confusingly named after the original C library)
+PyMuPDF==1.24.3
+
+# FAISS — Facebook AI Similarity Search (vector database)
+# Use faiss-cpu for machines without a GPU (most laptops)
+# Use faiss-gpu if you have an NVIDIA GPU
+faiss-cpu==1.8.0
+
+# Sentence Transformers — generates text embeddings
+# This is what converts text → vectors
+sentence-transformers==2.7.0
+
+# NumPy — numerical computing (arrays, math operations)
+# Used to handle the embedding arrays
+numpy==1.26.4
+
+# HTTPX — async HTTP client (for calling Ollama's API)
+httpx==0.27.0
+
+# Python-Multipart — needed for handling file uploads in FastAPI
+python-multipart==0.0.9
+
+# Pydantic — data validation (FastAPI uses this under the hood)
+pydantic==2.7.1
+
+# python-dotenv — loads variables from a local .env file during development
+# (Render/production sets environment variables directly, no .env needed there)
+python-dotenv==1.0.1
