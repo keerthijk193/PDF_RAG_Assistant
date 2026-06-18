@@ -61,7 +61,7 @@ class ChatRequest(BaseModel):
     """The body of a POST /api/chat request."""
     question: str              # The user's new question
     history: List[ChatMessage] = []  # Previous messages (default: empty list)
-    model: str = "llama3"      # Which Ollama model to use
+    model: str = "llama-3.1-8b-instant"      # Which Ollama model to use
 
 
 # -----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
     # Step 1: Find relevant chunks from our PDF knowledge base
-    context_chunks = search_similar_chunks(request.question, top_k=4)
+    context_chunks = search_similar_chunks(request.question, top_k=3)
 
     # Step 2: Build the full prompt with context + history
     messages = build_rag_prompt(

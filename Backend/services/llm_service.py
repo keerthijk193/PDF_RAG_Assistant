@@ -269,7 +269,7 @@ GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 # Groq's hosted model name for Llama 3
 # (Other free options on Groq: "mixtral-8x7b-32768", "gemma2-9b-it")
-DEFAULT_MODEL = "llama3-8b-8192"
+DEFAULT_MODEL = "llama-3.1-8b-instant"
 
 
 # -----------------------------------------------------------------------------
@@ -293,22 +293,40 @@ def build_rag_prompt(
     else:
         context_text = "No relevant context found in the uploaded documents."
 
+    # system_message = {
+    #     "role": "system",
+    #     "content": (
+    #         "You are a helpful AI assistant that answers questions based on "
+    #         "the provided document context. Follow these rules:\n\n"
+    #         "1. ONLY answer using the information from the provided context.\n"
+    #         "2. If the context doesn't contain the answer, say: "
+    #         "'I couldn't find information about that in the uploaded documents.'\n"
+    #         "3. Be concise and clear.\n"
+    #         "4. If quoting from the document, mention it.\n"
+    #         "5. Do not make up information.\n\n"
+    #         f"Here is the relevant context from the user's documents:\n\n"
+    #         f"{context_text}"
+    #     )
+    # }
     system_message = {
-        "role": "system",
-        "content": (
-            "You are a helpful AI assistant that answers questions based on "
-            "the provided document context. Follow these rules:\n\n"
-            "1. ONLY answer using the information from the provided context.\n"
-            "2. If the context doesn't contain the answer, say: "
-            "'I couldn't find information about that in the uploaded documents.'\n"
-            "3. Be concise and clear.\n"
-            "4. If quoting from the document, mention it.\n"
-            "5. Do not make up information.\n\n"
-            f"Here is the relevant context from the user's documents:\n\n"
-            f"{context_text}"
-        )
-    }
-
+    "role": "system",
+    "content": (
+        "You are a PDF document assistant.\n\n"
+        "Rules:\n"
+        "1. Answer the user's question using only the provided context.\n"
+        "2. NEVER repeat exercises, worksheets, quizzes, or questions from the document.\n"
+        "3. NEVER generate new questions.\n"
+        "4. Summarize information in your own words.\n"
+        "5. If asked for learning outcomes, provide concise bullet points.\n"
+        "6. Ignore page numbers, indexes, headers, footers, and numbering.\n"
+        "7. If the answer is not present, say so.\n\n"
+        "8. If the user asks for a summary, provide a concise summary of the document.\n"
+        "9. If the user asks for a summary of a specific chapter, provide a concise summary of that chapter.\n"
+        "10.Ignore corrupted symbols, OCR artifacts, and unreadable characters.\n"
+        "Do not reproduce them in the answer."
+        f"Context:\n{context_text}"
+    )
+}
     messages = [system_message]
 
     for msg in chat_history[-10:]:
@@ -348,13 +366,13 @@ async def stream_ollama_response(
             "If deployed on Render: add GROQ_API_KEY in the Environment tab of your service."
         )
         return
-
+    print("Model being sent:", model)
     payload = {
         "model": model,
         "messages": messages,
         "stream": True,
         "temperature": 0.7,
-        "max_tokens": 1024,
+        "max_tokens": 512, 
     }
 
     headers = {

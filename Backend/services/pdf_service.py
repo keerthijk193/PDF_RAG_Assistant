@@ -30,6 +30,8 @@
 # matching. Vectors let us find "semantically similar" chunks.
 # =============================================================================
 
+import re
+
 import fitz  # PyMuPDF — extracts text from PDFs
 import faiss  # Facebook AI Similarity Search — vector database
 import numpy as np  # NumPy — for working with arrays of numbers
@@ -141,7 +143,9 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
         chunk_text_str = " ".join(chunk_words)
 
         # Only add non-empty chunks
-        if chunk_text_str.strip():
+        bad_chars = chunk_text_str.count("�")
+
+        if chunk_text_str.strip() and bad_chars < 5:
             chunks.append(chunk_text_str)
 
         # Move forward by (chunk_size - overlap) words
@@ -268,7 +272,13 @@ def search_similar_chunks(query: str, top_k: int = 4) -> List[str]:
     for idx in indices[0]:  # indices[0] because query_embedding is 2D
         if 0 <= idx < len(text_chunks):  # Safety check
             relevant_chunks.append(text_chunks[idx])
+    print("\n===== RETRIEVED CHUNKS =====")
 
+    for i, chunk in enumerate(relevant_chunks):
+        print(f"\nChunk {i+1}:")
+        print(chunk[:1000])
+
+    print("============================\n")
     return relevant_chunks
 
 
@@ -288,7 +298,13 @@ async def process_pdf(file_bytes: bytes, filename: str) -> dict:
     # Step 1: Extract text
     print("  [1/4] Extracting text from PDF...")
     raw_text = extract_text_from_pdf(file_bytes)
+    import re
 
+    # Remove non-printable Unicode characters
+    raw_text = re.sub(r'[^\x20-\x7E\n\r\t]', ' ', raw_text)
+
+    # Remove extra spaces
+    raw_text = re.sub(r'\s+', ' ', raw_text)
     if not raw_text.strip():
         raise ValueError("The PDF appears to be empty or contains only images (no extractable text).")
 

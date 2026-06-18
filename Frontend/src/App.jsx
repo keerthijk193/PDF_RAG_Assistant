@@ -408,7 +408,7 @@ function App() {
   });
 
   // selectedModel: which Ollama model to use for answering questions
-  const [selectedModel, setSelectedModel] = useState("llama3");
+  const [selectedModel, setSelectedModel] = useState("llama-3.1-8b-instant");
 
   // ---------------------------------------------------------------------------
   // REFS — for accessing DOM elements directly (not through React state)
@@ -640,10 +640,10 @@ function App() {
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
           >
-            <option value="llama3">Llama 3 (recommended)</option>
-            <option value="mistral">Mistral 7B</option>
-            <option value="llama2">Llama 2</option>
-            <option value="phi3">Phi-3 Mini (fast)</option>
+            <option value="llama-3.1-8b-instant">Llama 3.1 8B </option>
+            <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
+            <option value="openai/gpt-oss-20b">GPT OSS 20B</option>
+            <option value="openai/gpt-oss-120b">GPT OSS 120B</option>
           </select>
           <p className="model-hint">
             Make sure to run: <code>ollama pull {selectedModel}</code>
